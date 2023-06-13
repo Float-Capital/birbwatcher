@@ -28,3 +28,37 @@ networks:
               - name: Token
                 labels:
                   - "existingTransferredToken"
+      - name: PoolyPfers
+        abi_file_path: null
+        address: "0xBCC664B1E6848caba2Eb2f3dE6e21F81b9276dD8" # 15882116
+        handler: src/EventHandlers.ts
+        events:
+          - event: "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+            requiredEntities:
+              - name: "User"
+                labels:
+                  - "userFrom"
+                  - "userTo"
+              - name: Nftcollection
+                labels:
+                  - "nftCollectionUpdated"
+              - name: Token
+                labels:
+                  - "existingTransferredToken"
+      - name: ChuckBurgeronNFT
+        abi_file_path: null
+        address: "0x9aF7B3cfCa8a0d0feD9A8C9b77f6088cB1bbF791" # 16302826
+        handler: src/EventHandlers.ts
+        events:
+          - event: "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+            requiredEntities:
+              - name: "User"
+                labels:
+                  - "userFrom"
+                  - "userTo"
+              - name: Nftcollection
+                labels:
+                  - "nftCollectionUpdated"
+              - name: Token
+                labels:
+                  - "existingTransferredToken"
