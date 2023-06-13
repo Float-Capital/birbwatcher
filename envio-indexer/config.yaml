@@ -1,0 +1,65 @@
+version: 0.0.0
+description: Pooltogether community nft birbwatcher
+repository: https://github.com/float-capital/birbwatcher
+networks:
+  - id: 1
+    rpc_url: https://eth.llamarpc.com
+    start_block: 14838105
+    contracts:
+      - name: PoolySupporter
+        abi_file_path: null
+        address: "0x90B3832e2F2aDe2FE382a911805B6933C056D6ed"
+        handler: src/EventHandlers.ts
+        events:
+          - event: "event NFTInitialized(string name, string symbol, uint128 nftPrice, uint32 maxNFT, uint32 maxMint, uint32 startTimestamp, uint32 endTimestamp, address owner)"
+            requiredEntities: []
+          - event: "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+            requiredEntities:
+              - name: "User"
+                labels:
+                  - "userFrom"
+                  - "userTo"
+              - name: Nftcollection
+                labels:
+                  - "nftCollectionUpdated"
+              - name: Token
+                labels:
+                  - "existingTransferredToken"
+      - name: PoolyLawyer
+        abi_file_path: null
+        address: "0x3545192b340F50d77403DC0A64cf2b32F03d00A9"
+        handler: src/EventHandlers.ts
+        events:
+          - event: "event NFTInitialized(string name, string symbol, uint128 nftPrice, uint32 maxNFT, uint32 maxMint, uint32 startTimestamp, uint32 endTimestamp, address owner)"
+            requiredEntities: []
+          - event: "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+            requiredEntities:
+              - name: "User"
+                labels:
+                  - "userFrom"
+                  - "userTo"
+              - name: Nftcollection
+                labels:
+                  - "nftCollectionUpdated"
+              - name: Token
+                labels:
+                  - "existingTransferredToken"
+      - name: PoolyJudge
+        abi_file_path: null
+        address: "0x5663e3E096f1743e77B8F71b5DE0CF9Dfd058523"
+        handler: src/EventHandlers.ts
+        events:
+          - event: "event NFTInitialized(string name, string symbol, uint128 nftPrice, uint32 maxNFT, uint32 maxMint, uint32 startTimestamp, uint32 endTimestamp, address owner)"
+            requiredEntities: []
+          - event: "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+            requiredEntities:
+              - name: "User"
+                labels:
+                  - "userFrom"
+                  - "userTo"
+              - name: Nftcollection
+                labels:
+                  - "nftCollectionUpdated"
+              - name: Token
+                labels:
+                  - "existingTransferredToken"
