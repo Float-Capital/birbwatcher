@@ -1,6 +1,7 @@
 import React from "react";
 import Search from "./components/svgs/Search";
 import NFTCollectionCard from "./components/NFTCollectionCard";
+import Loader from "./components/Loader";
 import axios from "axios";
 import { ethers } from "ethers";
 
@@ -69,6 +70,7 @@ function App() {
   const [userTokens, setUserTokens] = React.useState([]);
   const [errorMessage, setErrorMessage] = React.useState("");
   const [metadata, setMetadata] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const reset = () => {
     setErrorMessage(""); // reset error message
@@ -82,10 +84,11 @@ function App() {
 
   const handleInputChange = (e) => {
     setUserAddress(e.target.value);
-    reset();
   };
 
   async function handleClick() {
+    setIsLoading(true);
+    reset();
     let isEns = userAddress.includes(".eth");
     let address = isEns ? await getAddressFromENS(userAddress) : userAddress;
     fetchUserData(address);
@@ -138,7 +141,7 @@ function App() {
             // Handle errors
           }
         }
-
+        setIsLoading(false);
         fetchMetadata();
       }
     });
@@ -169,10 +172,16 @@ function App() {
         }
       )
       .then((response) => {
-        setUserTokens(response.data.data.token);
+        let r = response.data.data.token;
+        if (r.length === 0) {
+          setIsLoading(false);
+          setErrorMessage("User not found");
+        }
+        setUserTokens(r);
       })
       .catch((error) => {
-        setErrorMessage("User not found");
+        setIsLoading(false);
+        setErrorMessage("Failed to fetch data from backend");
         console.error(`Error fetching data: ${error}`);
       });
   };
@@ -193,21 +202,25 @@ function App() {
             value={userAddress}
             onChange={handleInputChange}
           />
-          <div
-            className="w-[60px] ml-4 p-2 border-1 rounded-lg bg-green-300"
+          <button
+            className="w-[60px] ml-4 p-2 border-1 rounded-lg bg-gray-300 hover:bg-gray-100 focus:bg-gray-100"
             onClick={handleClick}
           >
             <Search />
-          </div>
+          </button>
         </div>
         <p>{errorMessage}</p>
       </div>
-      {userTokens.length > 0 ? (
-        <div className="flex flex-row">
+
+      {isLoading ? (
+        <Loader />
+      ) : userTokens.length > 0 ? (
+        <div className="flex flex-row flex-wrap justify-center">
           {metadata.map((token) => {
+            let size = metadata.length > 4 ? "100px" : "300px";
             return (
               <div className="m-2">
-                <img src={token.image} width="300px" height="300px" />
+                <img src={token.image} width={size} height={size} />
                 <p>{token.name}</p>
               </div>
             );
