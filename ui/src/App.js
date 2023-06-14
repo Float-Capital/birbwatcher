@@ -26,6 +26,20 @@ const contractAddressToRpcUrlMapping = (address) => {
   }
 };
 
+async function getAddressFromENS(ensName) {
+  const provider = new ethers.providers.JsonRpcProvider(
+    "https://eth.llamarpc.com"
+  );
+
+  try {
+    const address = await provider.resolveName(ensName);
+    return address;
+  } catch (error) {
+    console.error("Error resolving ENS name:", error);
+    return null;
+  }
+}
+
 async function fetchIPFSJSON(endpoint) {
   const gatewayURL = "https://ipfs.io/ipfs/";
 
@@ -45,6 +59,8 @@ async function fetchIPFSJSON(endpoint) {
 
 function App() {
   // 0xf28eA36e3E68Aff0e8c9bFF8037ba2150312ac48 - denham.eth
+  // 0x684f49bc1e04339d84F2370f14Dc1491A3B4F113 - rliriano.eth
+  // 0x9F36A6bB398118bdCD5B1bC3343D8FEB6d7d02B9 - tjark.eth
   // 0x93D3F6d68B6416035Aa0c60E3c6D184b33d2c40A - some random address
   // 0x141EfE71dc89aC5b4DC8e9B9429a80978D6750b9 - some random address
   // 0x9f2B2aF2771747De236CDc38f10a169897330324 - some random address
@@ -54,20 +70,30 @@ function App() {
   const [errorMessage, setErrorMessage] = React.useState("");
   const [metadata, setMetadata] = React.useState([]);
 
-  const handleInputChange = (e) => {
-    setUserAddress(e.target.value);
+  const reset = () => {
     setErrorMessage(""); // reset error message
     setUserTokens([]); // reset user tokens
     setMetadata([]); // reset metadata
   };
 
-  const handleClick = () => {
-    fetchUserData(userAddress);
+  React.useEffect(() => {
+    reset();
+  }, []);
+
+  const handleInputChange = (e) => {
+    setUserAddress(e.target.value);
+    reset();
   };
+
+  async function handleClick() {
+    let isEns = userAddress.includes(".eth");
+    let address = isEns ? await getAddressFromENS(userAddress) : userAddress;
+    fetchUserData(address);
+  }
 
   React.useEffect(() => {
     userTokens.forEach((token) => {
-      let tokenAddressAndTokenId = token.split("-");
+      let tokenAddressAndTokenId = token.id.split("-");
 
       if (tokenAddressAndTokenId[0] && tokenAddressAndTokenId[1]) {
         async function fetchMetadata() {
@@ -75,11 +101,7 @@ function App() {
             let tokenAddress = tokenAddressAndTokenId[0];
             let tokenId = tokenAddressAndTokenId[1];
 
-            console.log("tokenAddress: ", tokenAddress);
-
             let rpcUrl = contractAddressToRpcUrlMapping(tokenAddress);
-
-            console.log("rpcUrl: ", rpcUrl);
 
             // Create an ethers.js provider
             const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
@@ -103,22 +125,14 @@ function App() {
 
             let metadataJSON = await response.json();
 
-            console.log("metadataJSON: ", metadataJSON);
-
             if (isHostedOnIPFS) {
+              // map ipfs image url to http gateway
               metadataJSON.image =
                 "https://ipfs.io/ipfs/" +
                 metadataJSON.image.replace("ipfs://", "");
             }
 
-            console.log("metadataJSON: ", metadataJSON);
-            // Set the metadata in the state
-
-            let metaDataArr = [...metadata, metadataJSON];
-
-            console.log("metaDataArr: ", metaDataArr);
-
-            setMetadata(metaDataArr);
+            setMetadata((metadata) => [...metadata, metadataJSON]);
           } catch (error) {
             console.error(error);
             // Handle errors
@@ -132,10 +146,10 @@ function App() {
 
   const fetchUserData = (address) => {
     // note to change the limit 100
-    let userTokensQuery = ` 
-    query MyQuery ($address: String!) {
-      user(where: {address: {_eq: $address}}) {
-        tokens 
+    let userTokensQuery = `query MyQuery ($address: String!) {
+      token(where: {owner: {_ilike: $address}})
+      {
+        id
       }
     }
   `;
@@ -155,7 +169,7 @@ function App() {
         }
       )
       .then((response) => {
-        setUserTokens(response.data.data.user[0].tokens);
+        setUserTokens(response.data.data.token);
       })
       .catch((error) => {
         setErrorMessage("User not found");
@@ -174,7 +188,7 @@ function App() {
         <div className="flex flex-row w-full">
           <input
             type="text"
-            placeholder="Search a collectooors address here 🐦"
+            placeholder="Search a collectooors address or ens handle here 🐦"
             className="w-[80%] min-w-[500px] p-4 border-1 rounded-lg"
             value={userAddress}
             onChange={handleInputChange}
@@ -189,10 +203,10 @@ function App() {
         <p>{errorMessage}</p>
       </div>
       {userTokens.length > 0 ? (
-        <div>
+        <div className="flex flex-row">
           {metadata.map((token) => {
             return (
-              <div>
+              <div className="m-2">
                 <img src={token.image} width="300px" height="300px" />
                 <p>{token.name}</p>
               </div>
