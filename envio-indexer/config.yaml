@@ -62,3 +62,45 @@ networks:
               - name: Token
                 labels:
                   - "existingTransferredToken"
+  - id: 10
+    rpc_url: https://rpc.ankr.com/optimism
+    start_block: 22228546
+    contracts:
+      - name: PooltogetherCoinbase
+        abi_file_path: null
+        address: "0xc10baAd4D7a0C3574d50FA606666EB7De176c7E6"
+        handler: src/EventHandlers.ts
+        events:
+          - event: "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+            requiredEntities:
+              - name: "User"
+                labels:
+                  - "userFrom"
+                  - "userTo"
+              - name: Nftcollection
+                labels:
+                  - "nftCollectionUpdated"
+              - name: Token
+                labels:
+                  - "existingTransferredToken"
+  - id: 137
+    rpc_url: https://polygon-rpc.com
+    start_block: 25977052
+    contracts:
+      - name: PoolParty
+        abi_file_path: null
+        address: "0x841918849e6784d7e643837ad59571ea1fc5000b"
+        handler: src/EventHandlers.ts
+        events:
+          - event: "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+            requiredEntities:
+              - name: "User"
+                labels:
+                  - "userFrom"
+                  - "userTo"
+              - name: Nftcollection
+                labels:
+                  - "nftCollectionUpdated"
+              - name: Token
+                labels:
+                  - "existingTransferredToken"
