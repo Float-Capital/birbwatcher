@@ -92,7 +92,6 @@ function HomePage() {
   React.useEffect(() => {
     if (userFetchState.user.tokensMap) {
       userFetchState.user.tokensMap.forEach((token) => {
-        console.log("1");
         let tokenAddressAndTokenId = token.id.split("-");
 
         if (tokenAddressAndTokenId[0] && tokenAddressAndTokenId[1]) {
@@ -114,23 +113,32 @@ function HomePage() {
               );
 
               // Call the contract's tokenURI function to get the metadata URI
-              const tokenURI = await contract.tokenURI(tokenId);
+              let tokenURI = await contract.tokenURI(tokenId);
 
               // Fetch the metadata JSON using the URI
-              const isHostedOnIPFS = tokenURI.includes("ipfs://");
+              let isHostedOnIPFS = tokenURI.includes("ipfs://");
+
+              const isBase64Encoded = tokenURI.includes("base64");
 
               const response = isHostedOnIPFS
                 ? await fetchIPFSJSON(tokenURI)
                 : await fetch(tokenURI);
 
-              let metadataJSON = await response.json();
+              let metadataJSON;
+              if (isBase64Encoded) {
+                tokenURI = tokenURI.replace(
+                  "data:application/json;base64,",
+                  ""
+                );
+                tokenURI = tokenURI.replace("==", "");
+                const rawString = atob(tokenURI);
+                const decodedObject = JSON.parse(rawString);
+                metadataJSON = decodedObject;
+              } else {
+                metadataJSON = await response.json();
+              }
 
-              //ffs they encoded it as base 64
-              console.log(tokenId);
-              console.log(tokenURI);
-              console.log(isHostedOnIPFS);
-              console.log(metadataJSON);
-              console.log(isHostedOnIPFS);
+              isHostedOnIPFS = metadataJSON.image.includes("ipfs://");
 
               if (isHostedOnIPFS) {
                 // map ipfs image url to http gateway
@@ -139,7 +147,6 @@ function HomePage() {
                   metadataJSON.image.replace("ipfs://", "");
               }
 
-              console.log("2");
               setMetadata((metadata) => [...metadata, metadataJSON]);
             } catch (error) {
               console.error(error);
