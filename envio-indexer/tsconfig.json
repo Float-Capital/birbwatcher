@@ -23,8 +23,5 @@
   "include": [
     "src",
     "generated"
-  ],
-  "files": [
-    "./hardhat.config.ts"
   ]
 }

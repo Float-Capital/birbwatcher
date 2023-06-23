@@ -1,5 +1,5 @@
 {
-  "name": "nftFactory",
+  "name": "Pool together birbwatcher",
   "version": "0.1.0",
   "scripts": {
     "test": "mocha",
@@ -12,6 +12,7 @@
     "gen:build": "(cd generated && rescript build)",
     "gen:watch": "(cd generated && rescript build -w)",
     "start": "ts-node generated/src/Index.bs.js",
+    "envio": "envio",
     "codegen-fuji": "cargo run --manifest-path ../../codegenerator/Cargo.toml -- codegen -c config.fuji.yaml",
     "codegen": "cargo run --manifest-path ../../codegenerator/Cargo.toml -- codegen"
   },
@@ -27,15 +28,16 @@
     "chai-as-promised": "^7.1.1",
     "ethers": "^6.1.0",
     "hardhat": "^2.14.0",
+    "hardhat-abi-exporter": "^2.10.1",
+    "hardhat-deploy": "^0.11.26",
     "mocha": "^10.2.0",
     "mocha-reporter": "^0.1.1",
     "postgres": "^3.3.4",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4",
-    "hardhat-abi-exporter": "^2.10.1",
-    "hardhat-deploy": "^0.11.26"
+    "typescript": "^5.0.4"
   },
   "dependencies": {
+    "envio": "0.0.0-mj-force-npm-publish-20230622183701-20dbde6",
     "generated": "workspace:*"
   }
 }

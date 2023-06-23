@@ -7,6 +7,8 @@ import {
   PoolyPfersContract_registerTransferHandler,
   ChuckBurgeronNFTContract_registerTransferLoadEntities,
   ChuckBurgeronNFTContract_registerTransferHandler,
+  PoolyWinsNFTContract_registerTransferLoadEntities,
+  PoolyWinsNFTContract_registerTransferHandler,
   PooltogetherCoinbaseContract_registerTransferLoadEntities,
   PooltogetherCoinbaseContract_registerTransferHandler,
   PoolPartyContract_registerTransferLoadEntities,
@@ -32,8 +34,8 @@ PoolyContract_registerNFTInitializedHandler(({ event, context }) => {
 });
 
 PoolyContract_registerTransferLoadEntities(({ event, context }) => {
-  context.user.userFromLoad(event.params.from, { loaders: undefined });
-  context.user.userToLoad(event.params.to, { loaders: undefined });
+  context.user.userFromLoad(event.params.from);
+  context.user.userToLoad(event.params.to);
   context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
   context.token.existingTransferredTokenLoad(
     event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
@@ -57,7 +59,7 @@ PoolyContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.update(nftCollection);
+      context.nftcollection.insert(nftCollection);
     }
   } else {
     console.warn(
@@ -66,34 +68,16 @@ PoolyContract_registerTransferHandler(({ event, context }) => {
     return;
   }
   if (event.params.from !== zeroAddress) {
-    let loadedUserFrom = context.user.userFrom();
-    let userFromTokensOpt: Array<string> = loadedUserFrom?.tokens ?? [];
-    let userFromTokens: Array<string> = [];
-    if (typeof userFromTokensOpt !== "string") {
-      userFromTokens.concat(userFromTokensOpt);
-    }
-    let index = userFromTokens.indexOf(token.id, 0);
-    if (index > -1) {
-      userFromTokens.splice(index, 1);
-    }
     let userFrom = {
       id: event.params.from,
       address: event.params.from,
-      tokens: userFromTokens,
     };
     context.user.insert(userFrom);
   }
   if (event.params.to !== zeroAddress) {
-    let loadedUserTo = context.user.userTo();
-    let userToTokensOpt: Array<string> = loadedUserTo?.tokens ?? [];
-    let userToTokens: Array<string> = [token.id];
-    if (typeof userToTokensOpt !== "string") {
-      userToTokens.concat(userToTokensOpt);
-    }
     let userTo = {
       id: event.params.to,
       address: event.params.to,
-      tokens: userToTokens,
     };
     context.user.insert(userTo);
   }
@@ -101,8 +85,8 @@ PoolyContract_registerTransferHandler(({ event, context }) => {
 });
 
 PoolyPfersContract_registerTransferLoadEntities(({ event, context }) => {
-  context.user.userFromLoad(event.params.from, { loaders: undefined });
-  context.user.userToLoad(event.params.to, { loaders: undefined });
+  context.user.userFromLoad(event.params.from);
+  context.user.userToLoad(event.params.to);
   context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
   context.token.existingTransferredTokenLoad(
     event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
@@ -126,7 +110,7 @@ PoolyPfersContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.update(nftCollection);
+      context.nftcollection.insert(nftCollection);
     }
   } else {
     // create the collection if this is the first transfer
@@ -141,34 +125,73 @@ PoolyPfersContract_registerTransferHandler(({ event, context }) => {
     context.nftcollection.insert(nftCollection);
   }
   if (event.params.from !== zeroAddress) {
-    let loadedUserFrom = context.user.userFrom();
-    let userFromTokensOpt: Array<string> = loadedUserFrom?.tokens ?? [];
-    let userFromTokens: Array<string> = [];
-    if (typeof userFromTokensOpt !== "string") {
-      userFromTokens.concat(userFromTokensOpt);
-    }
-    let index = userFromTokens.indexOf(token.id, 0);
-    if (index > -1) {
-      userFromTokens.splice(index, 1);
-    }
     let userFrom = {
       id: event.params.from,
       address: event.params.from,
-      tokens: userFromTokens,
     };
     context.user.insert(userFrom);
   }
   if (event.params.to !== zeroAddress) {
-    let loadedUserTo = context.user.userTo();
-    let userToTokensOpt: Array<string> = loadedUserTo?.tokens ?? [];
-    let userToTokens: Array<string> = [token.id];
-    if (typeof userToTokensOpt !== "string") {
-      userToTokens.concat(userToTokensOpt);
-    }
     let userTo = {
       id: event.params.to,
       address: event.params.to,
-      tokens: userToTokens,
+    };
+    context.user.insert(userTo);
+  }
+  context.token.insert(token);
+});
+
+PoolyWinsNFTContract_registerTransferLoadEntities(({ event, context }) => {
+  context.user.userFromLoad(event.params.from);
+  context.user.userToLoad(event.params.to);
+  context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
+  context.token.existingTransferredTokenLoad(
+    event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
+    { loaders: undefined }
+  );
+});
+
+PoolyWinsNFTContract_registerTransferHandler(({ event, context }) => {
+  let nftCollectionUpdated = context.nftcollection.nftCollectionUpdated();
+  let token = {
+    id: event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
+    tokenId: event.params.tokenId,
+    collection: event.srcAddress,
+    owner: event.params.to,
+  };
+  if (nftCollectionUpdated) {
+    let existingToken = context.token.existingTransferredToken();
+    if (!existingToken) {
+      let currentSupply = Number(nftCollectionUpdated.currentSupply) + 1;
+      let nftCollection: nftcollectionEntity = {
+        ...nftCollectionUpdated,
+        currentSupply,
+      };
+      context.nftcollection.insert(nftCollection);
+    }
+  } else {
+    // create the collection if this is the first transfer
+    let nftCollection: nftcollectionEntity = {
+      id: event.srcAddress,
+      contractAddress: event.srcAddress,
+      name: "Pooly Wins", // https://etherscan.io/address/0xfccc94f2b99ec71ff04e6ce9f0ea9797f4f0536b
+      symbol: "PLY",
+      maxSupply: BigInt(0),
+      currentSupply: 0,
+    };
+    context.nftcollection.insert(nftCollection);
+  }
+  if (event.params.from !== zeroAddress) {
+    let userFrom = {
+      id: event.params.from,
+      address: event.params.from,
+    };
+    context.user.insert(userFrom);
+  }
+  if (event.params.to !== zeroAddress) {
+    let userTo = {
+      id: event.params.to,
+      address: event.params.to,
     };
     context.user.insert(userTo);
   }
@@ -176,8 +199,8 @@ PoolyPfersContract_registerTransferHandler(({ event, context }) => {
 });
 
 ChuckBurgeronNFTContract_registerTransferLoadEntities(({ event, context }) => {
-  context.user.userFromLoad(event.params.from, { loaders: undefined });
-  context.user.userToLoad(event.params.to, { loaders: undefined });
+  context.user.userFromLoad(event.params.from);
+  context.user.userToLoad(event.params.to);
   context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
   context.token.existingTransferredTokenLoad(
     event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
@@ -201,7 +224,7 @@ ChuckBurgeronNFTContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.update(nftCollection);
+      context.nftcollection.insert(nftCollection);
     }
   } else {
     // create the collection if this is the first transfer
@@ -216,34 +239,16 @@ ChuckBurgeronNFTContract_registerTransferHandler(({ event, context }) => {
     context.nftcollection.insert(nftCollection);
   }
   if (event.params.from !== zeroAddress) {
-    let loadedUserFrom = context.user.userFrom();
-    let userFromTokensOpt: Array<string> = loadedUserFrom?.tokens ?? [];
-    let userFromTokens: Array<string> = [];
-    if (typeof userFromTokensOpt !== "string") {
-      userFromTokens.concat(userFromTokensOpt);
-    }
-    let index = userFromTokens.indexOf(token.id, 0);
-    if (index > -1) {
-      userFromTokens.splice(index, 1);
-    }
     let userFrom = {
       id: event.params.from,
       address: event.params.from,
-      tokens: userFromTokens,
     };
     context.user.insert(userFrom);
   }
   if (event.params.to !== zeroAddress) {
-    let loadedUserTo = context.user.userTo();
-    let userToTokensOpt: Array<string> = loadedUserTo?.tokens ?? [];
-    let userToTokens: Array<string> = [token.id];
-    if (typeof userToTokensOpt !== "string") {
-      userToTokens.concat(userToTokensOpt);
-    }
     let userTo = {
       id: event.params.to,
       address: event.params.to,
-      tokens: userToTokens,
     };
     context.user.insert(userTo);
   }
@@ -252,8 +257,8 @@ ChuckBurgeronNFTContract_registerTransferHandler(({ event, context }) => {
 
 PooltogetherCoinbaseContract_registerTransferLoadEntities(
   ({ event, context }) => {
-    context.user.userFromLoad(event.params.from, { loaders: undefined });
-    context.user.userToLoad(event.params.to, { loaders: undefined });
+    context.user.userFromLoad(event.params.from);
+    context.user.userToLoad(event.params.to);
     context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
     context.token.existingTransferredTokenLoad(
       event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
@@ -278,7 +283,7 @@ PooltogetherCoinbaseContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.update(nftCollection);
+      context.nftcollection.insert(nftCollection);
     }
   } else {
     // create the collection if this is the first transfer
@@ -293,34 +298,16 @@ PooltogetherCoinbaseContract_registerTransferHandler(({ event, context }) => {
     context.nftcollection.insert(nftCollection);
   }
   if (event.params.from !== zeroAddress) {
-    let loadedUserFrom = context.user.userFrom();
-    let userFromTokensOpt: Array<string> = loadedUserFrom?.tokens ?? [];
-    let userFromTokens: Array<string> = [];
-    if (typeof userFromTokensOpt !== "string") {
-      userFromTokens.concat(userFromTokensOpt);
-    }
-    let index = userFromTokens.indexOf(token.id, 0);
-    if (index > -1) {
-      userFromTokens.splice(index, 1);
-    }
     let userFrom = {
       id: event.params.from,
       address: event.params.from,
-      tokens: userFromTokens,
     };
     context.user.insert(userFrom);
   }
   if (event.params.to !== zeroAddress) {
-    let loadedUserTo = context.user.userTo();
-    let userToTokensOpt: Array<string> = loadedUserTo?.tokens ?? [];
-    let userToTokens: Array<string> = [token.id];
-    if (typeof userToTokensOpt !== "string") {
-      userToTokens.concat(userToTokensOpt);
-    }
     let userTo = {
       id: event.params.to,
       address: event.params.to,
-      tokens: userToTokens,
     };
     context.user.insert(userTo);
   }
@@ -328,8 +315,8 @@ PooltogetherCoinbaseContract_registerTransferHandler(({ event, context }) => {
 });
 
 PoolPartyContract_registerTransferLoadEntities(({ event, context }) => {
-  context.user.userFromLoad(event.params.from, { loaders: undefined });
-  context.user.userToLoad(event.params.to, { loaders: undefined });
+  context.user.userFromLoad(event.params.from);
+  context.user.userToLoad(event.params.to);
   context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
   context.token.existingTransferredTokenLoad(
     event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
@@ -353,7 +340,7 @@ PoolPartyContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.update(nftCollection);
+      context.nftcollection.insert(nftCollection);
     }
   } else {
     // create the collection if this is the first transfer
@@ -368,34 +355,16 @@ PoolPartyContract_registerTransferHandler(({ event, context }) => {
     context.nftcollection.insert(nftCollection);
   }
   if (event.params.from !== zeroAddress) {
-    let loadedUserFrom = context.user.userFrom();
-    let userFromTokensOpt: Array<string> = loadedUserFrom?.tokens ?? [];
-    let userFromTokens: Array<string> = [];
-    if (typeof userFromTokensOpt !== "string") {
-      userFromTokens.concat(userFromTokensOpt);
-    }
-    let index = userFromTokens.indexOf(token.id, 0);
-    if (index > -1) {
-      userFromTokens.splice(index, 1);
-    }
     let userFrom = {
       id: event.params.from,
       address: event.params.from,
-      tokens: userFromTokens,
     };
     context.user.insert(userFrom);
   }
   if (event.params.to !== zeroAddress) {
-    let loadedUserTo = context.user.userTo();
-    let userToTokensOpt: Array<string> = loadedUserTo?.tokens ?? [];
-    let userToTokens: Array<string> = [token.id];
-    if (typeof userToTokensOpt !== "string") {
-      userToTokens.concat(userToTokensOpt);
-    }
     let userTo = {
       id: event.params.to,
       address: event.params.to,
-      tokens: userToTokens,
     };
     context.user.insert(userTo);
   }

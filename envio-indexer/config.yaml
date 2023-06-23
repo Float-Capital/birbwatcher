@@ -1,10 +1,11 @@
 version: 0.0.0
+name: Birbwatcher
 description: Pooltogether community nft birbwatcher
 repository: https://github.com/float-capital/birbwatcher
 networks:
   - id: 1
     rpc_url: https://eth.llamarpc.com
-    start_block: 14838105
+    start_block: 14838103
     contracts:
       - name: Pooly
         abi_file_path: null
@@ -45,6 +46,23 @@ networks:
               - name: Token
                 labels:
                   - "existingTransferredToken"
+      - name: PoolyWinsNFT
+        abi_file_path: null
+        address: "0xfccc94f2b99ec71ff04e6ce9f0ea9797f4f0536b" # 17521585
+        handler: src/EventHandlers.ts
+        events:
+          - event: "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+            requiredEntities:
+              - name: "User"
+                labels:
+                  - "userFrom"
+                  - "userTo"
+              - name: Nftcollection
+                labels:
+                  - "nftCollectionUpdated"
+              - name: Token
+                labels:
+                  - "existingTransferredToken"
       - name: ChuckBurgeronNFT
         abi_file_path: null
         address: "0x9aF7B3cfCa8a0d0feD9A8C9b77f6088cB1bbF791" # 16302826
@@ -63,7 +81,7 @@ networks:
                 labels:
                   - "existingTransferredToken"
   - id: 10
-    rpc_url: https://rpc.ankr.com/optimism
+    rpc_url: https://optimism.blockpi.network/v1/rpc/public # https://l2rpc.optimism.io https://optimism.blockpi.network/v1/rpc/public	https://mainnet.optimism.io https://rpc.ankr.com/optimism
     start_block: 22228546
     contracts:
       - name: PooltogetherCoinbase
@@ -84,7 +102,7 @@ networks:
                 labels:
                   - "existingTransferredToken"
   - id: 137
-    rpc_url: https://polygon-rpc.com
+    rpc_url: https://polygon.llamarpc.com # https://polygon-rpc.com
     start_block: 25977052
     contracts:
       - name: PoolParty
