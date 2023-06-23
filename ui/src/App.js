@@ -4,6 +4,7 @@ import NFTCollectionCard from "./components/NFTCollectionCard";
 import Loader from "./components/Loader";
 import axios from "axios";
 import { ethers } from "ethers";
+import collectionConfig from "./collection-config.js";
 
 const nftTokenURIABI = [
   "function tokenURI(uint256 tokenId) external view returns (string memory)",
@@ -71,6 +72,8 @@ function App() {
   const [errorMessage, setErrorMessage] = React.useState("");
   const [metadata, setMetadata] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  console.log(collectionConfig, "collectionConfig");
 
   const reset = () => {
     setErrorMessage(""); // reset error message
@@ -228,11 +231,9 @@ function App() {
         </div>
       ) : (
         <div className="mt-6 flex flex-row justify-center">
-          <NFTCollectionCard />
-          <NFTCollectionCard />
-          <NFTCollectionCard />
-          <NFTCollectionCard />
-          <NFTCollectionCard />
+          {collectionConfig.map((collection) => {
+            return <NFTCollectionCard collection={collection} />;
+          })}
         </div>
       )}
     </div>
