@@ -1,4 +1,4 @@
-const NFTThumbnail = ({ nft }) => {
+const NFTThumbnail = ({ token, size }) => {
   return (
     <div className="m-2">
       <img src={token.image} width={size} height={size} />

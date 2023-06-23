@@ -156,7 +156,7 @@ const fetchCollections = async () => {
 const fetchCollectionTokens = async (address, offset, limit) => {
   let collectionTokensQuery = `query MyQuery ($address: String!, $offset: Int!, $limit: Int!) {
             token(where: {collection: {_ilike: $address}}, order_by: {tokenId: asc}, limit: $limit, offset: $offset) {
-            tokenId
+            id
             }
         }
         `;
@@ -177,6 +177,7 @@ const fetchCollectionTokens = async (address, offset, limit) => {
     );
 
     let tokens = request.data.data.token;
+    console.log(tokens);
     let errorMessage;
     if (tokens["length"] === 0) {
       errorMessage = "Tokens not found";
