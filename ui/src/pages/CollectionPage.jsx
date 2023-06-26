@@ -5,12 +5,17 @@ import { useParams } from "react-router-dom";
 import { fetchCollection, fetchCollectionTokens } from "../data-fetchers.js";
 import NFTCollectionCard from "../components/NFTCollectionCard";
 import { ethers } from "ethers";
-import { fetchCollections, fetchIPFSJSON } from "../data-fetchers.js";
+import {
+  fetchCollections,
+  fetchCollectionCount,
+  fetchIPFSJSON,
+} from "../data-fetchers.js";
 import { nftTokenURIABI, contractAddressToRpcUrlMapping } from "../utils.js";
 import NFTThumbnail from "../components/NFTThumbnail";
 
 const CollectionPage = () => {
   let { collection } = useParams();
+
   const [collectionFetchState, setCollectionFetchState] = React.useState({
     loading: true,
     errorMessage: null,
@@ -21,13 +26,28 @@ const CollectionPage = () => {
     errorMessage: null,
     tokens: [],
   });
+  const [collectionCountState, setCollectionCountState] = React.useState({
+    loading: true,
+    errorMessage: null,
+    count: 0,
+  });
 
-  const [limit, setLimit] = React.useState(24);
+  const pageSize = 10;
+
+  const [limit, setLimit] = React.useState(pageSize);
   const [offset, setOffset] = React.useState(0);
+  const [pageNumber, setPageNumber] = React.useState(1);
+
   const [metadata, setMetadata] = React.useState([]);
   React.useEffect(() => {
     fetchCollection(collection).then((result) => {
       setCollectionFetchState((_) => result);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    fetchCollectionCount(collection).then((result) => {
+      setCollectionCountState((_) => result);
     });
   }, []);
 
@@ -102,6 +122,41 @@ const CollectionPage = () => {
     });
   }, [tokensFetchState.tokens]);
 
+  console.log(collectionCountState);
+
+  const previousPage = () => {
+    let loadingTokensFetchState = {
+      ...tokensFetchState,
+      loading: true,
+    };
+    setTokensFetchState((_) => loadingTokensFetchState);
+    setPageNumber((pageNumber) => pageNumber - 1);
+    setMetadata((_) => []);
+    setOffset((offset) => offset - pageSize);
+  };
+
+  const nextPage = () => {
+    let loadingTokensFetchState = {
+      ...tokensFetchState,
+      loading: true,
+    };
+    setTokensFetchState((_) => loadingTokensFetchState);
+    setPageNumber((pageNumber) => pageNumber + 1);
+    setMetadata((_) => []);
+    setOffset((offset) => offset + pageSize);
+  };
+
+  const goToPage = (page) => {
+    let loadingTokensFetchState = {
+      ...tokensFetchState,
+      loading: true,
+    };
+    setTokensFetchState((_) => loadingTokensFetchState);
+    setPageNumber((_) => page);
+    setMetadata((_) => []);
+    setOffset(() => pageSize * page);
+  };
+
   return (
     <div className="">
       <div className="flex flex-col items-center justify-center">
@@ -121,20 +176,80 @@ const CollectionPage = () => {
         ) : tokensFetchState.errorMessage ? (
           <p>{tokensFetchState.errorMessage}</p>
         ) : tokensFetchState.tokens != [] ? (
-          tokensFetchState.tokens.map((token) => {
-            return token.id;
-          })
+          metadata.length > 0 ? (
+            <div className="flex flex-col">
+              <div className="flex flex-row flex-wrap justify-center">
+                {metadata.map((token) => {
+                  let size =
+                    metadata && metadata.length > 4 ? "100px" : "300px";
+                  return <NFTThumbnail token={token} size={size} />;
+                })}
+              </div>
+              <div className="flex flex-row m-2 justify-center">
+                {pageNumber > 1 ? (
+                  <>
+                    <button
+                      className="m-2"
+                      onClick={(_) => {
+                        goToPage(1);
+                      }}
+                    >
+                      First
+                    </button>
+                    <button
+                      className="m-2"
+                      onClick={(_) => {
+                        previousPage();
+                      }}
+                    >
+                      Previous
+                    </button>
+                  </>
+                ) : null}
+                {Array.from({ length: 5 }, (_, index) => (
+                  <>
+                    {pageNumber + index + 1 - 3 > 0 &&
+                    pageNumber + index + 1 - 3 <
+                      collectionCountState.count / pageSize ? ( // prevents the page number from going below 0 and above the total number of pages
+                      <button
+                        className="m-2"
+                        onClick={(_) => {
+                          goToPage(pageNumber + index + 1 - 3);
+                        }}
+                        key={index + "-prev"}
+                      >
+                        {pageNumber + index + 1 - 3}
+                        {/*  // therefor shows 2 above and 2 below the current active page */}
+                      </button>
+                    ) : null}
+                  </>
+                ))}
+                {pageNumber < collectionCountState.count / pageSize ? (
+                  <>
+                    <button
+                      className="m-2"
+                      onClick={(_) => {
+                        nextPage();
+                      }}
+                    >
+                      Next
+                    </button>
+                    <button
+                      className="m-2"
+                      onClick={(_) => {
+                        goToPage(collectionCountState.count / pageSize - 1);
+                      }}
+                    >
+                      Last
+                    </button>
+                  </>
+                ) : null}
+              </div>
+            </div>
+          ) : null
         ) : (
           "No tokens found"
         )}
-        {metadata.length > 0 ? (
-          <div className="flex flex-row flex-wrap justify-center">
-            {metadata.map((token) => {
-              let size = metadata && metadata.length > 4 ? "100px" : "300px";
-              return <NFTThumbnail token={token} size={size} />;
-            })}
-          </div>
-        ) : null}
       </div>
     </div>
   );

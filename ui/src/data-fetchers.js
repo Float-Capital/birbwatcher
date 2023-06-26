@@ -44,7 +44,7 @@ const fetchUser = async (address) => {
       user: user[0],
     };
   } catch (error) {
-    let errorMessage = "Failed to fetch user from backend";
+    let errorMessage = "Failed to fetch user";
     console.error(`Error fetching data: ${error}`);
     return {
       loading: false,
@@ -92,7 +92,7 @@ const fetchCollection = async (address) => {
       nftcollection: nftcollection,
     };
   } catch (error) {
-    let errorMessage = "Failed to fetch nft collections from backend";
+    let errorMessage = "Failed to fetch nft collections";
     console.error(`Error fetching data: ${error}`);
     return {
       loading: false,
@@ -143,7 +143,7 @@ const fetchCollections = async () => {
       nftcollections: nftcollections,
     };
   } catch (error) {
-    let errorMessage = "Failed to fetch nft collections from backend";
+    let errorMessage = "Failed to fetch nft collections";
     console.error(`Error fetching data: ${error}`);
     return {
       loading: false,
@@ -177,7 +177,7 @@ const fetchCollectionTokens = async (address, offset, limit) => {
     );
 
     let tokens = request.data.data.token;
-    console.log(tokens);
+
     let errorMessage;
     if (tokens["length"] === 0) {
       errorMessage = "Tokens not found";
@@ -189,12 +189,62 @@ const fetchCollectionTokens = async (address, offset, limit) => {
       tokens: tokens,
     };
   } catch (error) {
-    let errorMessage = "Failed to fetch tokens from backend";
+    let errorMessage = "Failed to fetch tokens";
     console.error(`Error fetching data: ${error}`);
     return {
       loading: false,
       errorMessage: errorMessage,
       tokens: [],
+    };
+  }
+};
+
+const fetchCollectionCount = async (address) => {
+  let collectionCountQuery = `query MyQuery ($address: String!) {          
+            token_aggregate(where: {collection: {_ilike: $address}}) {
+              aggregate {
+                count
+              }
+            }
+        }
+        `;
+
+  try {
+    let request = await axios.post(
+      hasuraEndpoint,
+      JSON.stringify({
+        query: collectionCountQuery,
+        variables: { address: address },
+        operationName: "MyQuery",
+      }),
+      {
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+
+    console.log(request.data);
+
+    let count = request.data.data.token_aggregate.aggregate.count;
+
+    let errorMessage;
+    if (count == 0) {
+      errorMessage = "No NFT's in this collection, something seems odd";
+    }
+
+    return {
+      loading: false,
+      errorMessage: errorMessage,
+      count: count,
+    };
+  } catch (error) {
+    let errorMessage = "Failed to fetch count of tokens";
+    console.error(`Error fetching data: ${error}`);
+    return {
+      loading: false,
+      errorMessage: errorMessage,
+      count: 0,
     };
   }
 };
@@ -235,6 +285,7 @@ export {
   fetchCollection,
   fetchCollections,
   fetchCollectionTokens,
+  fetchCollectionCount,
   fetchIPFSJSON,
   getAddressFromENS,
 };
