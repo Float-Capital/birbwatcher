@@ -177,8 +177,8 @@ const CollectionPage = () => {
           <p>{tokensFetchState.errorMessage}</p>
         ) : tokensFetchState.tokens != [] ? (
           metadata.length > 0 ? (
-            <div className="flex flex-col">
-              <div className="flex flex-row flex-wrap justify-center">
+            <div className="flex flex-col relative">
+              <div className={`grid grid-cols-5 gap-2  justify-center mx-4`}>
                 {metadata.map((token) => {
                   let size =
                     metadata && metadata.length > 4 ? "100px" : "300px";
@@ -214,11 +214,11 @@ const CollectionPage = () => {
                       <button
                         className="m-2"
                         onClick={(_) => {
-                          goToPage(pageNumber + index + 1 - 3);
+                          goToPage(Math.round(pageNumber + index + 1 - 3));
                         }}
                         key={index + "-prev"}
                       >
-                        {pageNumber + index + 1 - 3}
+                        {Math.round(pageNumber + index + 1 - 3)}
                         {/*  // therefor shows 2 above and 2 below the current active page */}
                       </button>
                     ) : null}
