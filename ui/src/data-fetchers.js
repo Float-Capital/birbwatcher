@@ -224,8 +224,6 @@ const fetchCollectionCount = async (address) => {
       }
     );
 
-    console.log(request.data);
-
     let count = request.data.data.token_aggregate.aggregate.count;
 
     let errorMessage;

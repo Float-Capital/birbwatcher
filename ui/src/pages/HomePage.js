@@ -146,57 +146,59 @@ function HomePage() {
   }, [userFetchState.user]);
 
   return (
-    <div className="flex flex-col items-center justify-center text-gray-700">
-      <div className="flex flex-col items-center">
-        <h1 className="text-6xl font-thin tracking-wider">
-          Pooltogether birbwatcher
-        </h1>
+    <>
+      <div className="flex flex-col items-center justify-center text-gray-700">
+        <div className="flex flex-col items-center">
+          <h1 className="text-6xl font-thin tracking-wider">
+            Pooltogether birbwatcher
+          </h1>
+        </div>
+        <div className="my-6">
+          <div className="flex flex-row w-full">
+            <input
+              type="text"
+              placeholder="Search a collectooors address or ens handle here 🐦"
+              className="w-[80%] min-w-[500px] p-4 border-1 rounded-lg"
+              value={userAddress}
+              onChange={handleInputChange}
+              onKeyDown={handleEnterClicked}
+            />
+            <button
+              className="w-[60px] ml-4 p-2 border-1 rounded-lg bg-white hover:bg-gray-200 focus:bg-gray-100"
+              onClick={handleClick}
+            >
+              <Search />
+            </button>
+          </div>
+          <p>{errorMessage}</p>
+        </div>
+        {userFetchState.loading ? (
+          <Loader />
+        ) : metadata && metadata.length > 0 ? (
+          <div className="flex flex-row flex-wrap justify-center max-h-[70vh] overflow-y-auto overflow-scroll ">
+            {metadata.map((token) => {
+              let size = metadata && metadata.length > 4 ? "100px" : "300px";
+              return <NFTThumbnail token={token} size={size} />;
+            })}
+          </div>
+        ) : (
+          <div className="mt-6 max-w-[1200px] justify-center grid grid-cols-4 gap-2 justify-center">
+            {collectionsFetchState.loading ? (
+              <Loader />
+            ) : collectionsFetchState.errorMessage ? (
+              <p>{collectionsFetchState.errorMessage}</p>
+            ) : collectionsFetchState.nftcollections.length != 0 ? (
+              collectionsFetchState.nftcollections.map((collection) => {
+                return <NFTCollectionCard collection={collection} />;
+              })
+            ) : (
+              "No collections found"
+            )}
+          </div>
+        )}
+        <ByEnvio />
       </div>
-      <div className="my-6">
-        <div className="flex flex-row w-full">
-          <input
-            type="text"
-            placeholder="Search a collectooors address or ens handle here 🐦"
-            className="w-[80%] min-w-[500px] p-4 border-1 rounded-lg"
-            value={userAddress}
-            onChange={handleInputChange}
-            onKeyDown={handleEnterClicked}
-          />
-          <button
-            className="w-[60px] ml-4 p-2 border-1 rounded-lg bg-white hover:bg-gray-200 focus:bg-gray-100"
-            onClick={handleClick}
-          >
-            <Search />
-          </button>
-        </div>
-        <p>{errorMessage}</p>
-      </div>
-      {userFetchState.loading ? (
-        <Loader />
-      ) : metadata && metadata.length > 0 ? (
-        <div className="flex flex-row flex-wrap justify-center max-h-[70vh] overflow-y-auto overflow-scroll ">
-          {metadata.map((token) => {
-            let size = metadata && metadata.length > 4 ? "100px" : "300px";
-            return <NFTThumbnail token={token} size={size} />;
-          })}
-        </div>
-      ) : (
-        <div className="mt-6 max-w-[1200px] justify-center grid grid-cols-4 gap-2 justify-center">
-          {collectionsFetchState.loading ? (
-            <Loader />
-          ) : collectionsFetchState.errorMessage ? (
-            <p>{collectionsFetchState.errorMessage}</p>
-          ) : collectionsFetchState.nftcollections.length != 0 ? (
-            collectionsFetchState.nftcollections.map((collection) => {
-              return <NFTCollectionCard collection={collection} />;
-            })
-          ) : (
-            "No collections found"
-          )}
-        </div>
-      )}
-      <ByEnvio />
-    </div>
+    </>
   );
 }
 

@@ -26,7 +26,6 @@ function App() {
 
   return (
     <div className="flex flex-col h-full w-full items-center justify-center bg-[#2d0b5a] bg-opacity-30">
-      <NavBar />
       <RouterProvider router={router} />
     </div>
   );

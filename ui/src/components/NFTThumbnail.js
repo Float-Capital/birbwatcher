@@ -1,11 +1,11 @@
-const NFTThumbnail = ({ token, size }) => {
+const NFTThumbnail = ({ token }) => {
   const aLongString = 30;
+  console.log(token);
+  let isAVideo = token.image.includes(".mp4");
   return (
     <div className="m-2">
       <img src={token.image} className={"w-full max-w-[300px] h-auto "} />
-      <p className={`text-${token.name.length > aLongString ? "xs" : "md"}`}>
-        {token.name}
-      </p>
+      <p className={`text-xs`}>{token.name}</p>
     </div>
   );
 };
