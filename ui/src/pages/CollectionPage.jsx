@@ -3,7 +3,7 @@ import Loader from "../components/Loader";
 import collectionConfig from "../collection-config.js";
 import { useParams } from "react-router-dom";
 import { fetchCollection, fetchCollectionTokens } from "../data-fetchers.js";
-import NFTCollectionCard from "../components/NFTCollectionCard";
+import NFTCollectionCardDetailed from "../components/NFTCollectionCardDetailed";
 import { ethers } from "ethers";
 import {
   fetchCollections,
@@ -160,14 +160,14 @@ const CollectionPage = () => {
   return (
     <div className="">
       <div className="flex flex-col items-center justify-center">
-        Collection page Network: {collection}
-        <br />
         {collectionFetchState.loading ? (
           <Loader />
         ) : collectionFetchState.errorMessage ? (
           <p>{collectionFetchState.errorMessage}</p>
         ) : collectionFetchState.tokens != {} ? (
-          <NFTCollectionCard collection={collectionFetchState.nftcollection} />
+          <NFTCollectionCardDetailed
+            collection={collectionFetchState.nftcollection}
+          />
         ) : (
           "No collection found"
         )}

@@ -6,6 +6,7 @@ import axios from "axios";
 import { ethers } from "ethers";
 import collectionConfig from "../collection-config.js";
 import NFTThumbnail from "../components/NFTThumbnail";
+import ByEnvio from "../components/ByEnvio";
 import {
   fetchCollections,
   fetchIPFSJSON,
@@ -67,6 +68,12 @@ function HomePage() {
     let user = await fetchUser(address);
     setUserFetchState(user);
   }
+
+  const handleEnterClicked = (event) => {
+    if (event.keyCode === 13) {
+      handleClick();
+    }
+  };
 
   React.useEffect(() => {
     if (userFetchState.user.tokensMap) {
@@ -139,7 +146,7 @@ function HomePage() {
   }, [userFetchState.user]);
 
   return (
-    <div className="flex flex-col h-full items-center justify-center bg-gray-200 text-gray-700">
+    <div className="flex flex-col h-full items-center justify-center bg-[#2d0b5a] bg-opacity-30 text-gray-700">
       <div className="flex flex-col items-center">
         <h1 className="text-6xl font-thin tracking-wider">
           Pooltogether birbwatcher
@@ -153,9 +160,10 @@ function HomePage() {
             className="w-[80%] min-w-[500px] p-4 border-1 rounded-lg"
             value={userAddress}
             onChange={handleInputChange}
+            onKeyDown={handleEnterClicked}
           />
           <button
-            className="w-[60px] ml-4 p-2 border-1 rounded-lg bg-gray-300 hover:bg-gray-100 focus:bg-gray-100"
+            className="w-[60px] ml-4 p-2 border-1 rounded-lg bg-white hover:bg-gray-200 focus:bg-gray-100"
             onClick={handleClick}
           >
             <Search />
@@ -163,7 +171,6 @@ function HomePage() {
         </div>
         <p>{errorMessage}</p>
       </div>
-
       {userFetchState.loading ? (
         <Loader />
       ) : metadata && metadata.length > 0 ? (
@@ -174,7 +181,7 @@ function HomePage() {
           })}
         </div>
       ) : (
-        <div className="mt-6 flex max-w-[1200px] flex-row justify-center flex-wrap">
+        <div className="mt-6 max-w-[1200px] justify-center grid grid-cols-4 gap-2 justify-center">
           {collectionsFetchState.loading ? (
             <Loader />
           ) : collectionsFetchState.errorMessage ? (
@@ -188,6 +195,7 @@ function HomePage() {
           )}
         </div>
       )}
+      <ByEnvio />
     </div>
   );
 }
