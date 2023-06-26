@@ -1,5 +1,8 @@
 import React from "react";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import NavBar from "./components/NavBar";
 
 import HomePage from "./pages/HomePage";
 import AddressPage from "./pages/AddressPage";
@@ -21,7 +24,12 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <div className="flex flex-col h-full w-full items-center justify-center bg-[#2d0b5a] bg-opacity-30">
+      <NavBar />
+      <RouterProvider router={router} />
+    </div>
+  );
 }
 
 export default App;

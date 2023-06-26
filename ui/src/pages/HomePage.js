@@ -146,7 +146,7 @@ function HomePage() {
   }, [userFetchState.user]);
 
   return (
-    <div className="flex flex-col h-full items-center justify-center bg-[#2d0b5a] bg-opacity-30 text-gray-700">
+    <div className="flex flex-col items-center justify-center text-gray-700">
       <div className="flex flex-col items-center">
         <h1 className="text-6xl font-thin tracking-wider">
           Pooltogether birbwatcher
@@ -174,7 +174,7 @@ function HomePage() {
       {userFetchState.loading ? (
         <Loader />
       ) : metadata && metadata.length > 0 ? (
-        <div className="flex flex-row flex-wrap justify-center">
+        <div className="flex flex-row flex-wrap justify-center max-h-[70vh] overflow-y-auto overflow-scroll ">
           {metadata.map((token) => {
             let size = metadata && metadata.length > 4 ? "100px" : "300px";
             return <NFTThumbnail token={token} size={size} />;

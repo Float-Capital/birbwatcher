@@ -32,7 +32,7 @@ const CollectionPage = () => {
     count: 0,
   });
 
-  const pageSize = 10;
+  const pageSize = 15; // best as multiples of 5
 
   const [limit, setLimit] = React.useState(pageSize);
   const [offset, setOffset] = React.useState(0);
@@ -158,8 +158,8 @@ const CollectionPage = () => {
   };
 
   return (
-    <div className="">
-      <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-row">
+      <div className="flex flex-col w-1/3">
         {collectionFetchState.loading ? (
           <Loader />
         ) : collectionFetchState.errorMessage ? (
@@ -171,6 +171,8 @@ const CollectionPage = () => {
         ) : (
           "No collection found"
         )}
+      </div>
+      <div className="flex flex-col w-2/3">
         {tokensFetchState.loading ? (
           <Loader />
         ) : tokensFetchState.errorMessage ? (
