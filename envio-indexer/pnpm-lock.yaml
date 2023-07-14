@@ -5,8 +5,8 @@ importers:
   .:
     dependencies:
       envio:
-        specifier: 0.0.0-mj-force-npm-publish-20230622183701-20dbde6
-        version: 0.0.0-mj-force-npm-publish-20230622183701-20dbde6
+        specifier: 0.0.0-main-20230710113757-2bcc02d
+        version: 0.0.0-main-20230710113757-2bcc02d
       generated:
         specifier: workspace:*
         version: link:generated
@@ -1741,37 +1741,37 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /envio-darwin-arm64@0.0.0-mj-force-npm-publish-20230622183701-20dbde6:
-    resolution: {integrity: sha512-yWI/6dkyV9rgUV60WBEpxO/3CUSM1DNZDfTV3N402L9VZAqVF3L93n80Hl/viD3CTvs/27rFTfwldqnX6h1r1w==}
+  /envio-darwin-arm64@0.0.0-main-20230710113757-2bcc02d:
+    resolution: {integrity: sha512-OEBiHyROSK3PKf45ayqAnF1X/Dm9ttvU/x0PPihF9vvcji+knkPyDz68hqYNWKkHmogYu9HUmPSOR/g0McrJcw==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: false
     optional: true
 
-  /envio-darwin-x64@0.0.0-mj-force-npm-publish-20230622183701-20dbde6:
-    resolution: {integrity: sha512-3E1gGgyxd3hbv1u8ts1jZnNPBfY8IdHn1fWvufHrOLUQPOaOxJ3xvwe6xwRTaignV3TrbxKIX5P29F6CYkWkNg==}
+  /envio-darwin-x64@0.0.0-main-20230710113757-2bcc02d:
+    resolution: {integrity: sha512-Y5TdRhxrYiE4/wocQohUHahC/MXhWNFkAtZ3ICvGAqk4dEYz1AeeB+6g52SmHcgBk2IWEnUV9kK0lKohohRa4w==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: false
     optional: true
 
-  /envio-linux-x64@0.0.0-mj-force-npm-publish-20230622183701-20dbde6:
-    resolution: {integrity: sha512-a/Ivdtuo/ep1U7MCeLrdhb4wIS3gd2a3MGv/sRbiZBKpiNVsvRptS91oTQQPbEL+CELbTP2yvtI7302eZrpZ0g==}
+  /envio-linux-x64@0.0.0-main-20230710113757-2bcc02d:
+    resolution: {integrity: sha512-pP/G+accJ5iMZ8ZCB3x0yh1E9CUhLQcQRYk0VDTt0Ibsf7bkFpHd7iDXvAjAbNgny6KrD1vKiJ+w0/VOMbuFbg==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: false
     optional: true
 
-  /envio@0.0.0-mj-force-npm-publish-20230622183701-20dbde6:
-    resolution: {integrity: sha512-f8TrPFBWwNpu6eVlQWranggRVf+B7OIdoMO+8hqXOO3H97K0nSvpi6t0Fuy1OPc276JKkwn7U6Yi4scSLW6Sqw==}
+  /envio@0.0.0-main-20230710113757-2bcc02d:
+    resolution: {integrity: sha512-NLDird/xfZS0+cd/8zEjGuSZGXV8FC4h/IbtXLi7d0wqwH9zhofsgAT98cFmZanwbwDTMduZZoyEhryCh20Ynw==}
     hasBin: true
     optionalDependencies:
-      envio-darwin-arm64: 0.0.0-mj-force-npm-publish-20230622183701-20dbde6
-      envio-darwin-x64: 0.0.0-mj-force-npm-publish-20230622183701-20dbde6
-      envio-linux-x64: 0.0.0-mj-force-npm-publish-20230622183701-20dbde6
+      envio-darwin-arm64: 0.0.0-main-20230710113757-2bcc02d
+      envio-darwin-x64: 0.0.0-main-20230710113757-2bcc02d
+      envio-linux-x64: 0.0.0-main-20230710113757-2bcc02d
     dev: false
 
   /escalade@3.1.1:

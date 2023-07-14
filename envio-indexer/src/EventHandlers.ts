@@ -13,7 +13,7 @@ import {
   PooltogetherCoinbaseContract_Transfer_handler,
   PoolPartyContract_Transfer_loader,
   PoolPartyContract_Transfer_handler,
-} from "../generated/src/_handlers.gen";
+} from "../generated/src/Handlers.gen";
 
 import { nftcollectionEntity, tokenEntity } from "../generated/src/Types.gen";
 
