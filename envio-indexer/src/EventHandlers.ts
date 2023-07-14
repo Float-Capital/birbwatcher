@@ -1,27 +1,27 @@
 import {
-  PoolyContract_registerNFTInitializedLoadEntities,
-  PoolyContract_registerNFTInitializedHandler,
-  PoolyContract_registerTransferLoadEntities,
-  PoolyContract_registerTransferHandler,
-  PoolyPfersContract_registerTransferLoadEntities,
-  PoolyPfersContract_registerTransferHandler,
-  ChuckBurgeronNFTContract_registerTransferLoadEntities,
-  ChuckBurgeronNFTContract_registerTransferHandler,
-  PoolyWinsNFTContract_registerTransferLoadEntities,
-  PoolyWinsNFTContract_registerTransferHandler,
-  PooltogetherCoinbaseContract_registerTransferLoadEntities,
-  PooltogetherCoinbaseContract_registerTransferHandler,
-  PoolPartyContract_registerTransferLoadEntities,
-  PoolPartyContract_registerTransferHandler,
-} from "../generated/src/Handlers.gen";
+  PoolyContract_NFTInitialized_loader,
+  PoolyContract_NFTInitialized_handler,
+  PoolyContract_Transfer_loader,
+  PoolyContract_Transfer_handler,
+  PoolyPfersContract_Transfer_loader,
+  PoolyPfersContract_Transfer_handler,
+  ChuckBurgeronNFTContract_Transfer_loader,
+  ChuckBurgeronNFTContract_Transfer_handler,
+  PoolyWinsNFTContract_Transfer_loader,
+  PoolyWinsNFTContract_Transfer_handler,
+  PooltogetherCoinbaseContract_Transfer_loader,
+  PooltogetherCoinbaseContract_Transfer_handler,
+  PoolPartyContract_Transfer_loader,
+  PoolPartyContract_Transfer_handler,
+} from "../generated/src/_handlers.gen";
 
 import { nftcollectionEntity, tokenEntity } from "../generated/src/Types.gen";
 
 const zeroAddress = "0x0000000000000000000000000000000000000000";
 
-PoolyContract_registerNFTInitializedLoadEntities(({ event, context }) => {});
+PoolyContract_NFTInitialized_loader(({ event, context }) => {});
 
-PoolyContract_registerNFTInitializedHandler(({ event, context }) => {
+PoolyContract_NFTInitialized_handler(({ event, context }) => {
   let nftCollection: nftcollectionEntity = {
     id: event.srcAddress,
     contractAddress: event.srcAddress,
@@ -33,7 +33,7 @@ PoolyContract_registerNFTInitializedHandler(({ event, context }) => {
   context.nftcollection.set(nftCollection);
 });
 
-PoolyContract_registerTransferLoadEntities(({ event, context }) => {
+PoolyContract_Transfer_loader(({ event, context }) => {
   context.user.userFromLoad(event.params.from);
   context.user.userToLoad(event.params.to);
   context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
@@ -43,7 +43,7 @@ PoolyContract_registerTransferLoadEntities(({ event, context }) => {
   );
 });
 
-PoolyContract_registerTransferHandler(({ event, context }) => {
+PoolyContract_Transfer_handler(({ event, context }) => {
   let nftCollectionUpdated = context.nftcollection.nftCollectionUpdated();
   let token = {
     id: event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
@@ -63,7 +63,7 @@ PoolyContract_registerTransferHandler(({ event, context }) => {
     }
   } else {
     console.warn(
-      "There was an issue with events emitted, unregistered NFT collection transfer"
+      "There was an issue with events emitted, uned NFT collection transfer"
     );
     return;
   }
@@ -84,7 +84,7 @@ PoolyContract_registerTransferHandler(({ event, context }) => {
   context.token.set(token);
 });
 
-PoolyPfersContract_registerTransferLoadEntities(({ event, context }) => {
+PoolyPfersContract_Transfer_loader(({ event, context }) => {
   context.user.userFromLoad(event.params.from);
   context.user.userToLoad(event.params.to);
   context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
@@ -94,7 +94,7 @@ PoolyPfersContract_registerTransferLoadEntities(({ event, context }) => {
   );
 });
 
-PoolyPfersContract_registerTransferHandler(({ event, context }) => {
+PoolyPfersContract_Transfer_handler(({ event, context }) => {
   let nftCollectionUpdated = context.nftcollection.nftCollectionUpdated();
   let token = {
     id: event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
@@ -141,7 +141,7 @@ PoolyPfersContract_registerTransferHandler(({ event, context }) => {
   context.token.set(token);
 });
 
-PoolyWinsNFTContract_registerTransferLoadEntities(({ event, context }) => {
+PoolyWinsNFTContract_Transfer_loader(({ event, context }) => {
   context.user.userFromLoad(event.params.from);
   context.user.userToLoad(event.params.to);
   context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
@@ -151,7 +151,7 @@ PoolyWinsNFTContract_registerTransferLoadEntities(({ event, context }) => {
   );
 });
 
-PoolyWinsNFTContract_registerTransferHandler(({ event, context }) => {
+PoolyWinsNFTContract_Transfer_handler(({ event, context }) => {
   let nftCollectionUpdated = context.nftcollection.nftCollectionUpdated();
   let token = {
     id: event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
@@ -198,7 +198,7 @@ PoolyWinsNFTContract_registerTransferHandler(({ event, context }) => {
   context.token.set(token);
 });
 
-ChuckBurgeronNFTContract_registerTransferLoadEntities(({ event, context }) => {
+ChuckBurgeronNFTContract_Transfer_loader(({ event, context }) => {
   context.user.userFromLoad(event.params.from);
   context.user.userToLoad(event.params.to);
   context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
@@ -208,7 +208,7 @@ ChuckBurgeronNFTContract_registerTransferLoadEntities(({ event, context }) => {
   );
 });
 
-ChuckBurgeronNFTContract_registerTransferHandler(({ event, context }) => {
+ChuckBurgeronNFTContract_Transfer_handler(({ event, context }) => {
   let nftCollectionUpdated = context.nftcollection.nftCollectionUpdated();
   let token = {
     id: event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
@@ -255,19 +255,17 @@ ChuckBurgeronNFTContract_registerTransferHandler(({ event, context }) => {
   context.token.set(token);
 });
 
-PooltogetherCoinbaseContract_registerTransferLoadEntities(
-  ({ event, context }) => {
-    context.user.userFromLoad(event.params.from);
-    context.user.userToLoad(event.params.to);
-    context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
-    context.token.existingTransferredTokenLoad(
-      event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
-      { loaders: undefined }
-    );
-  }
-);
+PooltogetherCoinbaseContract_Transfer_loader(({ event, context }) => {
+  context.user.userFromLoad(event.params.from);
+  context.user.userToLoad(event.params.to);
+  context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
+  context.token.existingTransferredTokenLoad(
+    event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
+    { loaders: undefined }
+  );
+});
 
-PooltogetherCoinbaseContract_registerTransferHandler(({ event, context }) => {
+PooltogetherCoinbaseContract_Transfer_handler(({ event, context }) => {
   let nftCollectionUpdated = context.nftcollection.nftCollectionUpdated();
   let token = {
     id: event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
@@ -314,7 +312,7 @@ PooltogetherCoinbaseContract_registerTransferHandler(({ event, context }) => {
   context.token.set(token);
 });
 
-PoolPartyContract_registerTransferLoadEntities(({ event, context }) => {
+PoolPartyContract_Transfer_loader(({ event, context }) => {
   context.user.userFromLoad(event.params.from);
   context.user.userToLoad(event.params.to);
   context.nftcollection.nftCollectionUpdatedLoad(event.srcAddress);
@@ -324,7 +322,7 @@ PoolPartyContract_registerTransferLoadEntities(({ event, context }) => {
   );
 });
 
-PoolPartyContract_registerTransferHandler(({ event, context }) => {
+PoolPartyContract_Transfer_handler(({ event, context }) => {
   let nftCollectionUpdated = context.nftcollection.nftCollectionUpdated();
   let token = {
     id: event.srcAddress.concat("-").concat(event.params.tokenId.toString()),
