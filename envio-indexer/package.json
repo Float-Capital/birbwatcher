@@ -37,7 +37,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "envio": "0.0.0-mj-force-npm-publish-20230622183701-20dbde6",
+    "envio": "0.0.0-main-20230710113757-2bcc02d",
     "generated": "workspace:*"
   }
 }
