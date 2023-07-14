@@ -30,7 +30,7 @@ PoolyContract_registerNFTInitializedHandler(({ event, context }) => {
     maxSupply: event.params.maxNFT,
     currentSupply: 0,
   };
-  context.nftcollection.insert(nftCollection);
+  context.nftcollection.set(nftCollection);
 });
 
 PoolyContract_registerTransferLoadEntities(({ event, context }) => {
@@ -59,7 +59,7 @@ PoolyContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.insert(nftCollection);
+      context.nftcollection.set(nftCollection);
     }
   } else {
     console.warn(
@@ -72,16 +72,16 @@ PoolyContract_registerTransferHandler(({ event, context }) => {
       id: event.params.from,
       address: event.params.from,
     };
-    context.user.insert(userFrom);
+    context.user.set(userFrom);
   }
   if (event.params.to !== zeroAddress) {
     let userTo = {
       id: event.params.to,
       address: event.params.to,
     };
-    context.user.insert(userTo);
+    context.user.set(userTo);
   }
-  context.token.insert(token);
+  context.token.set(token);
 });
 
 PoolyPfersContract_registerTransferLoadEntities(({ event, context }) => {
@@ -110,7 +110,7 @@ PoolyPfersContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.insert(nftCollection);
+      context.nftcollection.set(nftCollection);
     }
   } else {
     // create the collection if this is the first transfer
@@ -122,23 +122,23 @@ PoolyPfersContract_registerTransferHandler(({ event, context }) => {
       maxSupply: BigInt(6372),
       currentSupply: 0,
     };
-    context.nftcollection.insert(nftCollection);
+    context.nftcollection.set(nftCollection);
   }
   if (event.params.from !== zeroAddress) {
     let userFrom = {
       id: event.params.from,
       address: event.params.from,
     };
-    context.user.insert(userFrom);
+    context.user.set(userFrom);
   }
   if (event.params.to !== zeroAddress) {
     let userTo = {
       id: event.params.to,
       address: event.params.to,
     };
-    context.user.insert(userTo);
+    context.user.set(userTo);
   }
-  context.token.insert(token);
+  context.token.set(token);
 });
 
 PoolyWinsNFTContract_registerTransferLoadEntities(({ event, context }) => {
@@ -167,7 +167,7 @@ PoolyWinsNFTContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.insert(nftCollection);
+      context.nftcollection.set(nftCollection);
     }
   } else {
     // create the collection if this is the first transfer
@@ -179,23 +179,23 @@ PoolyWinsNFTContract_registerTransferHandler(({ event, context }) => {
       maxSupply: BigInt(0),
       currentSupply: 0,
     };
-    context.nftcollection.insert(nftCollection);
+    context.nftcollection.set(nftCollection);
   }
   if (event.params.from !== zeroAddress) {
     let userFrom = {
       id: event.params.from,
       address: event.params.from,
     };
-    context.user.insert(userFrom);
+    context.user.set(userFrom);
   }
   if (event.params.to !== zeroAddress) {
     let userTo = {
       id: event.params.to,
       address: event.params.to,
     };
-    context.user.insert(userTo);
+    context.user.set(userTo);
   }
-  context.token.insert(token);
+  context.token.set(token);
 });
 
 ChuckBurgeronNFTContract_registerTransferLoadEntities(({ event, context }) => {
@@ -224,7 +224,7 @@ ChuckBurgeronNFTContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.insert(nftCollection);
+      context.nftcollection.set(nftCollection);
     }
   } else {
     // create the collection if this is the first transfer
@@ -236,23 +236,23 @@ ChuckBurgeronNFTContract_registerTransferHandler(({ event, context }) => {
       maxSupply: BigInt(0),
       currentSupply: 0,
     };
-    context.nftcollection.insert(nftCollection);
+    context.nftcollection.set(nftCollection);
   }
   if (event.params.from !== zeroAddress) {
     let userFrom = {
       id: event.params.from,
       address: event.params.from,
     };
-    context.user.insert(userFrom);
+    context.user.set(userFrom);
   }
   if (event.params.to !== zeroAddress) {
     let userTo = {
       id: event.params.to,
       address: event.params.to,
     };
-    context.user.insert(userTo);
+    context.user.set(userTo);
   }
-  context.token.insert(token);
+  context.token.set(token);
 });
 
 PooltogetherCoinbaseContract_registerTransferLoadEntities(
@@ -283,7 +283,7 @@ PooltogetherCoinbaseContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.insert(nftCollection);
+      context.nftcollection.set(nftCollection);
     }
   } else {
     // create the collection if this is the first transfer
@@ -295,23 +295,23 @@ PooltogetherCoinbaseContract_registerTransferHandler(({ event, context }) => {
       maxSupply: BigInt(0), // not capped afaik
       currentSupply: 0,
     };
-    context.nftcollection.insert(nftCollection);
+    context.nftcollection.set(nftCollection);
   }
   if (event.params.from !== zeroAddress) {
     let userFrom = {
       id: event.params.from,
       address: event.params.from,
     };
-    context.user.insert(userFrom);
+    context.user.set(userFrom);
   }
   if (event.params.to !== zeroAddress) {
     let userTo = {
       id: event.params.to,
       address: event.params.to,
     };
-    context.user.insert(userTo);
+    context.user.set(userTo);
   }
-  context.token.insert(token);
+  context.token.set(token);
 });
 
 PoolPartyContract_registerTransferLoadEntities(({ event, context }) => {
@@ -340,7 +340,7 @@ PoolPartyContract_registerTransferHandler(({ event, context }) => {
         ...nftCollectionUpdated,
         currentSupply,
       };
-      context.nftcollection.insert(nftCollection);
+      context.nftcollection.set(nftCollection);
     }
   } else {
     // create the collection if this is the first transfer
@@ -352,21 +352,21 @@ PoolPartyContract_registerTransferHandler(({ event, context }) => {
       maxSupply: BigInt(0), // not capped afaik
       currentSupply: 0,
     };
-    context.nftcollection.insert(nftCollection);
+    context.nftcollection.set(nftCollection);
   }
   if (event.params.from !== zeroAddress) {
     let userFrom = {
       id: event.params.from,
       address: event.params.from,
     };
-    context.user.insert(userFrom);
+    context.user.set(userFrom);
   }
   if (event.params.to !== zeroAddress) {
     let userTo = {
       id: event.params.to,
       address: event.params.to,
     };
-    context.user.insert(userTo);
+    context.user.set(userTo);
   }
-  context.token.insert(token);
+  context.token.set(token);
 });
