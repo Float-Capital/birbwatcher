@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ethers } from "ethers";
 
-const hasuraEndpoint = "http://localhost:8080/v1/graphql";
+const hasuraEndpoint = "https://envio.work/v1/graphql";
 
 const fetchUser = async (address) => {
   let userTokensQuery = `query MyQuery ($address: String!) {
