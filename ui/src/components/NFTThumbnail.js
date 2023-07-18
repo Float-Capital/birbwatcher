@@ -1,6 +1,5 @@
 const NFTThumbnail = ({ token }) => {
   const aLongString = 30;
-  console.log(token);
   let isAVideo = token.image.includes(".mp4");
   return (
     <div className="m-2">

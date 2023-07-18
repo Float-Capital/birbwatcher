@@ -123,8 +123,6 @@ const CollectionPage = () => {
     });
   }, [tokensFetchState.tokens]);
 
-  console.log(collectionCountState);
-
   const previousPage = () => {
     let loadingTokensFetchState = {
       ...tokensFetchState,
@@ -168,9 +166,11 @@ const CollectionPage = () => {
           ) : collectionFetchState.errorMessage ? (
             <p>{collectionFetchState.errorMessage}</p>
           ) : collectionFetchState.tokens != {} ? (
-            <NFTCollectionCardDetailed
-              collection={collectionFetchState.nftcollection}
-            />
+            <div className="mx-auto mt-2">
+              <NFTCollectionCardDetailed
+                collection={collectionFetchState.nftcollection}
+              />
+            </div>
           ) : (
             "No collection found"
           )}
@@ -188,7 +188,7 @@ const CollectionPage = () => {
                     return <NFTThumbnail token={token} />;
                   })}
                 </div>
-                <div className="flex flex-row m-2 justify-center">
+                <div className="flex flex-row m-2 justify-center text-white">
                   {pageNumber > 1 ? (
                     <>
                       <button

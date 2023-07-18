@@ -1,11 +1,14 @@
 const ByEnvio = () => {
   return (
-    <div className="m-4">
+    <div className="flex flex-row items-center m-4">
       Powered by{" "}
-      <a href="https://envio.dev" className="underline">
-        Envio
+      <a href="https://envio.dev">
+        <img
+          src="/images/envio.jpg"
+          style={{ height: "32px", margin: "4px" }}
+        />
       </a>{" "}
-      - Better, faster Indexing
+      Better, faster Indexing
     </div>
   );
 };

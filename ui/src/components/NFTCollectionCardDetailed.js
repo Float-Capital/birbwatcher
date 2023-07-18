@@ -5,7 +5,7 @@ const NFTCollectionCardDetailed = (props) => {
         src={`/images/${props.collection.contractAddress.toLowerCase()}.png`}
         className="w-[220px] h-[220px]"
       />
-      <div className="w-[220px] h-[220px] bg-gray-400 p-2">
+      <div className="flex flex-col items-center justify-center min-w-[220px] w-[220px] h-[220px] bg-gray-200 p-2 text-black">
         {props.collection.name}
         <br />
         symbol: {props.collection.symbol}

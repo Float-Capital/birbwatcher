@@ -25,7 +25,7 @@ function App() {
   ]);
 
   return (
-    <div className="flex flex-col h-full w-full items-center justify-center bg-[#2d0b5a] bg-opacity-30">
+    <div className="flex flex-col h-full w-full items-center justify-center bg-black text-white">
       <RouterProvider router={router} />
     </div>
   );

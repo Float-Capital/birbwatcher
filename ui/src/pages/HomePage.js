@@ -147,7 +147,7 @@ function HomePage() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center text-gray-700">
+      <div className="flex flex-col items-center justify-center text-white">
         <div className="flex flex-col items-center">
           <h1 className="text-6xl font-thin tracking-wider">
             Pooltogether birbwatcher
@@ -157,8 +157,8 @@ function HomePage() {
           <div className="flex flex-row w-full">
             <input
               type="text"
-              placeholder="Search a collectooors address or ens handle here 🐦"
-              className="w-[80%] min-w-[500px] p-4 border-1 rounded-lg"
+              placeholder="Search a collectooors address or ens handle here 🐦 (eg tjark.eth)"
+              className="w-[80%] min-w-[600px] p-4 border-1 rounded-lg text-black"
               value={userAddress}
               onChange={handleInputChange}
               onKeyDown={handleEnterClicked}
@@ -175,7 +175,7 @@ function HomePage() {
         {userFetchState.loading ? (
           <Loader />
         ) : metadata && metadata.length > 0 ? (
-          <div className="flex flex-row flex-wrap justify-center max-h-[70vh] overflow-y-auto overflow-scroll ">
+          <div className="flex flex-row flex-wrap justify-center max-h-[70vh] overflow-y-auto overflow-scroll border rounded border-white">
             {metadata.map((token) => {
               let size = metadata && metadata.length > 4 ? "100px" : "300px";
               return <NFTThumbnail token={token} size={size} />;
