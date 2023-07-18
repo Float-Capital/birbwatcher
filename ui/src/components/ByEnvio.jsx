@@ -1,6 +1,6 @@
 const ByEnvio = () => {
   return (
-    <div className="flex flex-row items-center m-4">
+    <div className="flex flex-col md:flex-row items-center m-2 md:m-4">
       Powered by{" "}
       <a href="https://envio.dev">
         <img

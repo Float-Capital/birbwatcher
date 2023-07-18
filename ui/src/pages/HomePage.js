@@ -149,7 +149,7 @@ function HomePage() {
     <>
       <div className="flex flex-col items-center justify-center text-white">
         <div className="flex flex-col items-center">
-          <h1 className="text-6xl font-bold tracking-wider">
+          <h1 className="text-4xl md:text-6xl font-bold text-center">
             Pooltogether birbwatcher
           </h1>
         </div>
@@ -158,7 +158,7 @@ function HomePage() {
             <input
               type="text"
               placeholder="Search a collectooors address or ens handle here 🐦 (eg tjark.eth)"
-              className="w-[80%] min-w-[600px] p-4 border-1 rounded-lg text-black"
+              className=" w-full md:w-[80%] md:min-w-[600px] text-xs md:text-sm p-2 md:p-4 border-1 rounded-lg text-black"
               value={userAddress}
               onChange={handleInputChange}
               onKeyDown={handleEnterClicked}
@@ -182,7 +182,7 @@ function HomePage() {
             })}
           </div>
         ) : (
-          <div className="mt-6 max-w-[1200px] justify-center grid grid-cols-4 gap-2 justify-center">
+          <div className="mt-6 max-w-[1200px] justify-center grid grid-cols-3 md:grid-cols-4 gap-2 justify-center">
             {collectionsFetchState.loading ? (
               <Loader />
             ) : collectionsFetchState.errorMessage ? (
