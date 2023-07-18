@@ -32,7 +32,7 @@ const fetchUser = async (address) => {
     let user = userData.data.data.user;
     if (user.length === 0) {
       errorMessage = "User not found";
-    } else if (user[0] && user[0].tokensMap == []) {
+    } else if (user[0] && user[0]?.tokensMap == []) {
       errorMessage = "User has no tokens";
     }
 

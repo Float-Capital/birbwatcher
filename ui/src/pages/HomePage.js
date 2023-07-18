@@ -61,12 +61,17 @@ function HomePage() {
   };
 
   async function handleClick() {
-    setUserFetchState({ ...userFetchState, loading: true });
-    reset();
-    let isEns = userAddress.includes(".eth");
-    let address = isEns ? await getAddressFromENS(userAddress) : userAddress;
-    let user = await fetchUser(address);
-    setUserFetchState(user);
+    if (userAddress.length > 0) {
+      setUserFetchState({ ...userFetchState, loading: true });
+      reset();
+      let isEns = userAddress.includes(".eth");
+
+      let address = isEns ? await getAddressFromENS(userAddress) : userAddress;
+      let user = await fetchUser(address);
+      console.log("user here");
+      console.log(user);
+      setUserFetchState(user);
+    }
   }
 
   const handleEnterClicked = (event) => {
@@ -76,7 +81,7 @@ function HomePage() {
   };
 
   React.useEffect(() => {
-    if (userFetchState.user.tokensMap) {
+    if (userFetchState.user && userFetchState.user.tokensMap) {
       userFetchState.user.tokensMap.forEach((token) => {
         let tokenAddressAndTokenId = token.id.split("-");
 
@@ -171,6 +176,7 @@ function HomePage() {
             </button>
           </div>
           <p>{errorMessage}</p>
+          <p>{userFetchState.errorMessage}</p>
         </div>
         {userFetchState.loading ? (
           <Loader />
