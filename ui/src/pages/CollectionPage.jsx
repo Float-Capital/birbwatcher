@@ -159,8 +159,8 @@ const CollectionPage = () => {
   return (
     <>
       <NavBar />
-      <div className="flex flex-row">
-        <div className="flex flex-col w-1/3">
+      <div className="flex md:flex-row flex-col">
+        <div className="flex flex-col w-full md:w-1/3 mt-2">
           {collectionFetchState.loading ? (
             <Loader />
           ) : collectionFetchState.errorMessage ? (
@@ -175,7 +175,7 @@ const CollectionPage = () => {
             "No collection found"
           )}
         </div>
-        <div className="flex flex-col w-2/3">
+        <div className="flex flex-col md:w-2/3 w-full h-full overflow-scroll">
           {tokensFetchState.loading ? (
             <Loader />
           ) : tokensFetchState.errorMessage ? (
@@ -183,7 +183,9 @@ const CollectionPage = () => {
           ) : tokensFetchState.tokens != [] ? (
             metadata.length > 0 ? (
               <div className="flex flex-col relative">
-                <div className={`grid grid-cols-5 gap-2  mx-4`}>
+                <div
+                  className={`grid grid-cols-3 md:grid-cols-5 gap-0 m-0 md:gap-2 md:mx-4`}
+                >
                   {metadata.map((token) => {
                     return <NFTThumbnail token={token} />;
                   })}
