@@ -149,7 +149,7 @@ function HomePage() {
     <>
       <div className="flex flex-col items-center justify-center text-white">
         <div className="flex flex-col items-center">
-          <h1 className="text-6xl font-thin tracking-wider">
+          <h1 className="text-6xl font-bold tracking-wider">
             Pooltogether birbwatcher
           </h1>
         </div>
