@@ -13,8 +13,8 @@
     "gen:watch": "(cd generated && rescript build -w)",
     "start": "ts-node generated/src/Index.bs.js",
     "envio": "envio",
-    "codegen-fuji": "cargo run --manifest-path ../../codegenerator/Cargo.toml -- codegen -c config.fuji.yaml",
-    "codegen": "cargo run --manifest-path ../../codegenerator/Cargo.toml -- codegen"
+    "db-setup": "envio local db-migrate setup",
+    "codegen": "envio codegen"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^3.0.0-beta.0",
@@ -37,7 +37,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "envio": "0.0.0-main-20230710113757-2bcc02d",
-    "generated": "workspace:*"
+    "envio": "0.0.1-20230814152545-3d5beba"
   }
 }
